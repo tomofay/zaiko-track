@@ -2,8 +2,8 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: laravel_app
+      dockerfile: dockerfile
+    container_name: zaiko-app
     restart: unless-stopped
     volumes:
       - .:/var/www
@@ -14,7 +14,7 @@ services:
 
   webserver:
     image: nginx:alpine
-    container_name: laravel_webserver
+    container_name: zaiko-nginx
     restart: unless-stopped
     ports:
       - "80:80"
@@ -28,7 +28,7 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: laravel_db
+    container_name: zaiko-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: zaiko_db
@@ -38,7 +38,7 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
     ports:
-      - "3306:3306" # Hanya buka ini jika butuh koneksi langsung dari luar (misal: TablePlus/DBeaver)
+      - "3306:3306"
     networks:
       - laravel-network
 
