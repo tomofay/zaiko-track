@@ -33,7 +33,7 @@ services:
     environment:
       MYSQL_DATABASE: zaiko_db
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_USER: zaiko_user
+      MYSQL_USER: root
       MYSQL_PASSWORD: zaiko123
     volumes:
       - dbdata:/var/lib/mysql
