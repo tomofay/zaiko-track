@@ -32,9 +32,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: zaiko_db
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_USER: root
-      MYSQL_PASSWORD: zaiko123
+      MYSQL_ROOT_PASSWORD: zaiko123
     volumes:
       - dbdata:/var/lib/mysql
     ports:
