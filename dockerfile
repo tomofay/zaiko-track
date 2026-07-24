@@ -1,10 +1,23 @@
 FROM php:8.3-fpm
 
-# Install dependencies sistem & ekstensi PHP
+# Install dependencies sistem
 RUN apt-get update && apt-get install -y \
-    git curl libpng-dev libonig-dev libxml2-dev zip unzip
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    libmagickwand-dev \
+    zip \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo_mysql mbstring gd bcmath
+# Install ekstensi PHP bawaan & zip
+RUN docker-php-ext-install pdo_mysql mbstring gd bcmath zip
+
+# Install ekstensi imagick via PECL
+RUN pecl install imagick && docker-php-ext-enable imagick
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
