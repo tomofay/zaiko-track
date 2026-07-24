@@ -1,0 +1,40 @@
+name: Deploy Laravel Docker to Ubuntu VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Vite Assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy via SSH to VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /var/www/laravel-project
+            git pull origin main
+            docker compose up -d --build
+            docker exec laravel_app php artisan migrate --force
+            docker exec laravel_app php artisan config:cache
+            docker exec laravel_app php artisan route:cache
+            docker exec laravel_app php artisan view:cache

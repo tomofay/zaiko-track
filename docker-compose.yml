@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: zaiko
+    restart: unless-stopped
+    volumes:
+      - .:/var/www
+    networks:
+      - laravel-network
+
+  webserver:
+    image: nginx:alpine
+    container_name: zaiko-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+    networks:
+      - laravel-network
+
+networks:
+  laravel-network:
+    driver: bridge
