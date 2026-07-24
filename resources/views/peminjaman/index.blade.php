@@ -108,7 +108,7 @@ Peminjaman
                                         </a>
                                     </td>
                                     <td>
-                                        @if ($detailPeminjaman)
+                                        @if ($hasDetailPeminjaman)
                                         {{-- @include('components.action-buttons', ['id' =>  $peminjaman->id_peminjaman, 'key'
                                         => $key, 'route' => 'peminjaman']) --}}
                                         <a href="#" class="btn btn-primary btn-xs edit-button" data-toggle="modal" data-target="#editModal{{$peminjaman->id_peminjaman}}"

@@ -10,23 +10,23 @@
     <table class="w-full">
         @php $count = 0 @endphp <!-- Menghitung jumlah item yang ditampilkan -->
         @foreach($barang as $key => $br)
-            @if($count % 3 == 0) <!-- Mulai baris baru setiap 3 item -->
+            @if($count % 2 == 0) <!-- Mulai baris baru setiap 2 item -->
                 <tr>
             @endif
             <td>
             <div class="label">
                 <div class="label-content">
                     <div class="qr">
-                        <img src="{{ public_path('/storage/qrcode/' . $br->qrcode_image) }}" style="width: 1.0cm;">
+                        <img src="{{ public_path('/storage/qrcode/' . $br->qrcode_image) }}">
                     </div>
-                    <div class="kodeTahun" style="font-size: 10px;">
-                        <p>{{ $br->kode_barang }}</p>
+                    <div class="kodeTahun">
+                        <p>{{ $br->kode_barang }}/2026</p>
                         <p>{{ $br->nama_barang }}</p>   
                 </div>
             </div>
             </td>
             @php $count++ @endphp <!-- Menambah hitungan item -->
-            @if($count % 3 == 0 || $loop->last) <!-- Menutup baris setiap 3 item atau pada item terakhir -->
+            @if($count % 2 == 0 || $loop->last) <!-- Menutup baris setiap 3 item atau pada item terakhir -->
                 </tr>
             @endif
         @endforeach

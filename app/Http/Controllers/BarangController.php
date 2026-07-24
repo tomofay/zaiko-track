@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\DetailPembelian;
+use App\Models\DetailPeminjaman;
 use App\Models\JenisBarang;
 use App\Models\Inventaris;
 use App\Exports\AlatPerlengkapanExport;
@@ -19,6 +20,21 @@ class BarangController extends Controller
     public function index(){
 
         $alatdanperlengkapan = Barang::with('inventaris')->where('id_jenis_barang', '!=', 3)->get();
+
+        $borrowedInventarisIds = DetailPeminjaman::where('status', 'dipinjam')
+            ->pluck('id_inventaris')
+            ->toArray();
+
+        $inventarisByBarang = Inventaris::whereIn('id_inventaris', $borrowedInventarisIds)
+            ->get()
+            ->groupBy('id_barang');
+
+        $alatdanperlengkapan->each(function ($item) use ($inventarisByBarang) {
+            $itemInventaris = $inventarisByBarang->get($item->id_barang, collect());
+            $item->is_dipinjam = $itemInventaris->isNotEmpty() 
+                && $item->inventaris->pluck('id_inventaris')->intersect($itemInventaris->pluck('id_inventaris'))->isNotEmpty();
+        });
+
         $bahan = Barang::where('id_jenis_barang',  3)->get();
         $barang = Barang::all();
         $inventaris = Inventaris::all();
@@ -28,9 +44,10 @@ class BarangController extends Controller
         });
         // dd($alatdanperlengkapan);
           // Create an associative array where keys are id_barang and values are updated stok_barang
-          $updatedStokBarang = $totals->map(function ($jumlah_barang, $id_barang) {
-            $barang = Barang::find($id_barang); // Assuming you have a model named Barang for the barang table
-            $updatedStok = $barang->stok_barang + $jumlah_barang;
+          $barangIds = $totals->keys()->toArray();
+        $barangs = Barang::whereIn('id_barang', $barangIds)->pluck('stok_barang', 'id_barang');
+        $updatedStokBarang = $totals->map(function ($jumlah_barang, $id_barang) use ($barangs) {
+            $updatedStok = ($barangs[$id_barang] ?? 0) + $jumlah_barang;
             return $updatedStok;
         });
 

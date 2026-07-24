@@ -396,10 +396,13 @@ class InventarisController extends Controller
         
         $Barangbahan = Barang::where('id_jenis_barang',  3)->get();
 
-        $inventarisAlat->each(function ($item) {
-            $item->status_pinjam = DetailPeminjaman::where('id_inventaris', $item->id_inventaris)
-                ->where('status', 'dipinjam')
-                ->exists();
+        $borrowedIds = DetailPeminjaman::where('status', 'dipinjam')
+            ->whereIn('id_inventaris', $inventarisAlat->pluck('id_inventaris'))
+            ->pluck('id_inventaris')
+            ->toArray();
+
+        $inventarisAlat->each(function ($item) use ($borrowedIds) {
+            $item->status_pinjam = in_array($item->id_inventaris, $borrowedIds);
         });
         
         return view('inventaris.show', [

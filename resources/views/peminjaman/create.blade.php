@@ -315,6 +315,7 @@ Tambah Peminjaman
 @stop
 
 @push('js')
+<script src="{{ asset('/dist/js/selectize.js') }}"></script>
 
 <form action="" id="delete-form" method="post">
     @method('delete')

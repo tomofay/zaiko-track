@@ -9,10 +9,10 @@ use App\Models\Ruangan;
 use App\Models\User;
 use App\Models\Guru;
 use App\Models\Karyawan;
-use App\Models\Cart;
+use App\Models\Notifikasi;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Events\NotifPeminjaman;
 use Illuminate\Support\Facades\DB;
 use App\Exports\PeminjamanExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -51,8 +51,7 @@ class PeminjamanController extends Controller
 
     // Retrieve other necessary data
     $barang = Barang::where('id_jenis_barang', '!=', 3)->get();
-    $detailPeminjaman = DetailPeminjaman::all();
-
+    $hasDetailPeminjaman = DetailPeminjaman::exists();
 
     $users = User::where('id_users', '!=', 1)->with('profile')->orderByRaw("LOWER(name)")->get();
     
@@ -64,7 +63,7 @@ class PeminjamanController extends Controller
         'peminjaman' => $peminjaman,
         'barang' => $barang,
         'id_barang' => $id_barang,
-        'detailPeminjaman' => $detailPeminjaman,
+        'hasDetailPeminjaman' => $hasDetailPeminjaman,
         'users' => $users,
         'guru' => $guru,
         'karyawan' => $karyawan,
@@ -127,19 +126,21 @@ class PeminjamanController extends Controller
 
     public function notifikasi(Request $request)
 {
-    // Get all peminjaman records
-    $peminjamans = Peminjaman::all();
+    $peminjamans = Peminjaman::whereHas('detailPeminjaman', function ($query) {
+        $query->where('status', 'dipinjam');
+    })->with('users')->get();
 
     foreach ($peminjamans as $peminjaman) {
         // Assuming tgl_kembali is the return date column
         $tgl_kembali = $peminjaman->tgl_kembali;
 
         // Check if the return date has passed
-        if (Carbon\Carbon::now()->greaterThan($tgl_kembali)) {
+        if (Carbon::now()->greaterThan($tgl_kembali)) {
             $peminjaman->status = 'dipinjam';
             $peminjaman->save();
 
-            $pengguna = User::where('id_users', $peminjaman->id_users)->first();
+            $pengguna = $peminjaman->users;
+            if (!$pengguna) continue;
             $notifikasi = new Notifikasi();
             $notifikasi->judul = 'Peminjaman Barang ';
             $notifikasi->pesan = 'Peminjaman barang yang Anda lakukan belum dikembalikan. Mohon segera mengembalikan barang yang dipinjam untuk mencegah keterlambatan.';
@@ -227,8 +228,9 @@ class PeminjamanController extends Controller
     public function showDetail($id_peminjaman)
     {
         $peminjaman = Peminjaman::with(['users.profile'])->find($id_peminjaman);
-        $detailPeminjamans = DetailPeminjaman::where('id_peminjaman', $id_peminjaman)->get();
-        $detailPeminjaman = DetailPeminjaman::where('id_peminjaman', $id_peminjaman)->get();
+        $detailPeminjamans = DetailPeminjaman::with(['inventaris.barang', 'inventaris.ruangan'])
+            ->where('id_peminjaman', $id_peminjaman)
+            ->get();
         $ruangan = Inventaris::select('id_ruangan', DB::raw('MAX(id_inventaris) as max_id_inventaris'))
         ->groupBy('id_ruangan')
         ->get();
@@ -257,7 +259,7 @@ class PeminjamanController extends Controller
         return view('peminjaman.show', [
             'peminjaman' => $peminjaman,
             'detailPeminjamans' => $detailPeminjamans,
-            'detailPeminjaman' => $detailPeminjaman,
+            'detailPeminjaman' => $detailPeminjamans,
             'id_barang_options' => $id_barang_options,
             'id_barang_edit' => $id_barang_edit,
             'ruangan' => $ruangan,

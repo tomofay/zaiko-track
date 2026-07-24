@@ -14,20 +14,13 @@ class PembelianController extends Controller
 {
     public function index(){
         $pembelian = Pembelian::where('id_pembelian', '!=', 1)
-        ->orderBy('tgl_pembelian', 'desc') // Mengurutkan berdasarkan tanggal pembelian secara descending (terbaru ke terlama)
+        ->orderBy('tgl_pembelian', 'desc')
+        ->withSum('detailPembelian', 'subtotal_pembelian')
+        ->withSum('detailPembelian', 'jumlah_barang')
         ->get();
         
-        $subtotals = [];
-        foreach ($pembelian as $pb) {
-            $subtotalPembelian = DetailPembelian::where('id_pembelian', $pb->id_pembelian)->sum('subtotal_pembelian');
-            $subtotals[$pb->id_pembelian] = $subtotalPembelian;
-        }
-        
-        $stoks = [];
-        foreach ($pembelian as $pb) {
-            $StokPembelians = DetailPembelian::where('id_pembelian', $pb->id_pembelian)->sum('jumlah_barang');
-            $stoks[$pb->id_pembelian] = $StokPembelians;
-        }
+        $subtotals = $pembelian->pluck('detail_pembelian_sum_subtotal_pembelian', 'id_pembelian');
+        $stoks = $pembelian->pluck('detail_pembelian_sum_jumlah_barang', 'id_pembelian');
 
         return view("pembelian.index",[
             'pembelian' => $pembelian,

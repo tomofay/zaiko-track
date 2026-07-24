@@ -49,10 +49,10 @@ Barang
                 <div id="tableAlatPerlengkapan" class="card-body m-0">
                     <div class="mb-2 d-flex justify-content-between">
                         <div>
-                            <button class="btn btn-primary mb-2" data-toggle="modal" data-target="#addModalPeralatan">Tambah</button>
+                            <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addModalPeralatan">Tambah</button>
                         </div>
                         <div>
-                            <button class="btn btn-success mb-2" data-toggle="modal" data-target="#modalPrint">Print Label</button>
+                            <button class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modalPrint">Print Label</button>
                             <a href="{{route('barang.exportAlatPerlengkapan')}}" class="btn btn-danger mb-2">Export Excel</a>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ Barang
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="editModalLabel">Pilih Barang</h5>
-                                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                         <i class="fa fa-close" style="color: black;"></i>
                                     </button>
                                 </div>
@@ -107,7 +107,7 @@ Barang
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-success">Print</button>
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                                     </div>
                                 </form>
                             </div>
@@ -126,6 +126,7 @@ Barang
                                             Terinventarisasi <a href="{{ route('inventaris.index') }}" class="fas fa-link"></a>
                                         </th>
                                         <th>Jenis Barang</th>
+                                        <th>Status</th>
                                         <th style="width:189px;">Opsi</th>
                                     </tr>
                                 </thead>
@@ -149,10 +150,17 @@ Barang
                                             @endif                                     
                                         </td>
                                         <td>{{$br->jenisbarang->nama_jenis_barang}}</td>
+                                        <td>
+                                            @if($br->is_dipinjam)
+                                                <span class="badge bg-gradient-warning">Dipinjam</span>
+                                            @else
+                                                <span class="badge bg-gradient-success">Tersedia</span>
+                                            @endif
+                                        </td>
                                         
                                         <td>
                                             <div class="btn-group">
-                                                <a href="#" class="btn btn-primary btn-xs edit-button" data-toggle="modal" data-target="#editModalPerlengkapan{{$br->id_barang}}"
+                                                <a href="#" class="btn btn-primary btn-xs edit-button" data-bs-toggle="modal" data-bs-target="#editModalPerlengkapan{{$br->id_barang}}"
                                                     data-id="{{$br->id_barang}}">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
@@ -174,7 +182,7 @@ Barang
                 <div id="tableBahanPraktik" class="card-body m-0">
                     <div class="mb-2 d-flex justify-content-between">
                         <div>
-                            <button class="btn btn-primary mb-2" data-toggle="modal" data-target="#addModalBahan">Tambah</button>
+                            <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addModalBahan">Tambah</button>
                         </div>
                         <div>
                             <a href="{{route('barang.exportBahan')}}" class="btn btn-danger mb-2">Export Excel</a>
@@ -208,7 +216,7 @@ Barang
                                         {{-- <td>{{$br->jenisbarang->nama_jenis_barang}}</td> --}}
                                         <td>
                                             <div class="btn-group">
-                                                <a href="#" class="btn btn-primary btn-xs edit-button" data-toggle="modal" data-target="#editModalBahan{{$br->id_barang}}"
+                                                <a href="#" class="btn btn-primary btn-xs edit-button" data-bs-toggle="modal" data-bs-target="#editModalBahan{{$br->id_barang}}"
                                                     data-id="{{$br->id_barang}}">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
@@ -235,7 +243,7 @@ Barang
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Tambah Barang</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close" style="color: black;"></i>
                 </button>
             </div>
@@ -267,7 +275,7 @@ Barang
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Simpan</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                     </div>
                 </form>
             </div>
@@ -279,7 +287,7 @@ Barang
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Tambah barang bahan</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close" style="color: black;"></i>
                 </button>
             </div>
@@ -302,7 +310,7 @@ Barang
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Simpan</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                     </div>
                 </form>
             </div>
@@ -317,7 +325,7 @@ Barang
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Edit Barang</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa fa-close" style="color: black;"></i>
                     </button>
                 </div>
@@ -354,7 +362,7 @@ Barang
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Simpan</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         </div>
                     </form>
                 </div>
@@ -370,7 +378,7 @@ Barang
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Edit Barang</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa fa-close" style="color: black;"></i>
                     </button>
                 </div>
@@ -400,7 +408,7 @@ Barang
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Simpan</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         </div>
                     </form>
                 </div>

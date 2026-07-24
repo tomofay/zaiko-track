@@ -1,40 +1,46 @@
 .label {
-    width: 6cm; /* Mengatur lebar maksimal menjadi 6 cm */
-    height: auto; /* Mengatur tinggi agar otomatis */
-    display: inline-block; /* Membuat label dalam satu baris */
-    border: 0.8px solid black; /* Tambahkan border untuk memisahkan label */
-    padding: 2px; /* Mengatur padding */
-    box-sizing: border-box; /* Memastikan padding tidak menambah ukuran elemen */
-    position: relative; /* Tambahkan posisi relatif untuk penyesuaian posisi */
-    overflow: hidden; /* Menyembunyikan teks yang melampaui batas */
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    border: 0.8px solid black;
+    padding: 4px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
 }
 .label-content {
-    display: flex; /* Menggunakan flexbox untuk tata letak internal */
-    flex-direction: column; /* Mengatur tata letak menjadi vertikal */
-    align-items: flex-start; /* Menyelaraskan elemen di bagian atas */
-    width: 100%; /* Memastikan elemen mengambil seluruh lebar kontainer */
-    padding: 0; /* Menghilangkan padding */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0;
 }
 .kodeTahun {
     text-align: start;
     display: inline-block;
-    vertical-align: baseline; /* Menyelaraskan secara vertikal ke tengah */
-    max-width: 100%; /* Memastikan lebar maksimal 100% dari label */
-    margin-left: 0.1cm; /* Menambahkan jarak minimal antara QR code dan teks */
+    vertical-align: baseline;
+    max-width: 100%;
+    margin-left: 0.1cm;
 }
 .kodeTahun p {
-    margin: 0; /* Menghilangkan margin default dari elemen <p> */
-    line-height: 1.2; /* Mengatur tinggi baris untuk mengurangi jarak antar <p> */
-    word-break: break-word; /* Memastikan teks membungkus jika terlalu panjang */
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.3;
+    word-break: break-word;
 }
 .qr {
     text-align: right;
     display: inline-block;
-    vertical-align: top; /* Menyelaraskan elemen di atas */
-    padding-right: 0; /* Menghilangkan padding kanan */
-    margin-right: 0; /* Menghilangkan margin kanan */
+    vertical-align: top;
+    padding-right: 0;
+    margin-right: 0;
 }
 .qr img {
-    vertical-align: top; /* Menyelaraskan gambar di bagian atas */
-    margin: 0; /* Menghilangkan margin pada gambar */
+    vertical-align: top;
+    margin: 0;
+    width: 2cm;
+    height: 2cm;
 }
+
+table.w-full { width: 100%; border-collapse: collapse; table-layout: fixed; }
+table.w-full td { width: 50%; padding: 4px; vertical-align: top; }

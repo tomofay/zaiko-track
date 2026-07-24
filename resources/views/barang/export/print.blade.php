@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Print Label</title>
-<head>
-    <link rel="stylesheet" href="{{public_path('/css/label.css')}}">
+    <link rel="stylesheet" href="{{ public_path('/css/label.css') }}">
 </head>
 <body>
     <table class="w-full">
-        @foreach($barang as $key => $br)
-        <td>
-        <div class="label">
-                <div class="label-content">
-                    <div class="qr">
-                        <img src="{{ public_path('/storage/qrcode/' . $br->qrcode_image) }}" style="width: 1.0cm;">
+        <tr>
+            @foreach($barang as $key => $br)
+                <td style="width: 50%;">
+                    <div class="label">
+                        <div class="label-content">
+                            <div class="qr">
+                                <img src="{{ public_path('/storage/qrcode/' . $br->qrcode_image) }}">
+                            </div>
+                            <div class="kodeTahun">
+                                <p><strong>{{ $br->kode_barang }}</strong></p>
+                                <p>{{ $br->nama_barang }}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="kodeTahun" style="font-size: 10px;">
-                        <p>{{ $br->kode_barang }}</p>
-                        <p>{{ $br->nama_barang }}</p>   
-                </div>
-            </div>
-        </td>
-        @endforeach
+                </td>
+            @endforeach
+        </tr>
     </table>
 </body>
 </html>

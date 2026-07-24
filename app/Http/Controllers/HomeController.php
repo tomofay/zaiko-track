@@ -37,12 +37,13 @@ class HomeController extends Controller
         $inventaris = Inventaris::selectRaw('SUM(COALESCE(jumlah_barang, 1)) as total_jumlah_barang')
             ->value('total_jumlah_barang');
         if($inventaris == null){
-            $inventaris == 0;
+            $inventaris = 0;
         }
-        $jadwalKembali = DetailPeminjaman::with(['peminjaman'])
-            ->where('detail_peminjaman.status', 'dipinjam') // Tentukan tabel detail_peminjaman
+        $jadwalKembali = DetailPeminjaman::with(['peminjaman', 'inventaris.barang'])
+            ->where('detail_peminjaman.status', 'dipinjam')
             ->join('peminjaman', 'detail_peminjaman.id_peminjaman', '=', 'peminjaman.id_peminjaman')
             ->orderBy('peminjaman.tgl_kembali')
+            ->limit(15)
             ->get();   
 
         $user = Auth::user();
@@ -51,7 +52,7 @@ class HomeController extends Controller
             ->whereHas('detailPeminjaman', function ($query) use ($user) {
                 $query->where('id_users', $user->id_users);
             })
-            ->with(['detailPeminjaman.inventarisis.barang'])->get();
+            ->with(['detailPeminjaman.inventaris.barang'])->limit(15)->get();
         } else {
             $jadwals = $jadwalKembali->groupBy('id_peminjaman');
         }
